@@ -66,6 +66,11 @@ returns true if plugin should continue with sending AJAX request, false will abo
 
         var iDisplayStart = 0;
 
+        this.fnRefreshEditable = function (cellClass) {
+            this.$('td.' + cellClass).editable('destroy');
+            fnApplyEditable(this.fnGetNodes());
+        };
+
         function fnGetCellID(cell) {
             ///<summary>
             ///Utility function used to determine id of the cell
@@ -163,7 +168,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
             ///<param name="errorText" type="String">text that should be shown</param>
             ///<param name="action" type="String"> action that was executed when error occured e.g. "update", "delete", or "add"</param>
 
-            alert(errorText);
+            errorAlert(errorText);
         }
 
         function _fnStartProcessingMode() {
@@ -282,6 +287,8 @@ returns true if plugin should continue with sending AJAX request, false will abo
                     properties.fnEndProcessingMode();
                     var status = "";
                     var aPos = oTable.fnGetPosition(this);
+                    //bhl fix aPos[2] for resort
+                    var origCol = oSettings.aoColumns[aPos[2]]._ColReorder_iOrigCol;
                     
                     var bRefreshTable = !oSettings.oFeatures.bServerSide;
                     $("td.last-updated-cell", oTable.fnGetNodes( )).removeClass("last-updated-cell");
@@ -293,11 +300,17 @@ returns true if plugin should continue with sending AJAX request, false will abo
                         properties.fnShowError(sValue.replace(properties.sFailureResponsePrefix, "").trim(), "update");
                         status = "failure";
                     } else {
-                    
-                        if (properties.sSuccessResponse == "IGNORE" || 
+                                          // BHL added HTML response
+                        if (properties.sSuccessResponse == "HTML" || (properties.aoColumns != null && properties.aoColumns[origCol] != null && properties.aoColumns[origCol].sSuccessResponse == "HTML")) {
+                            oTable.fnUpdate(sValue, aPos[0], aPos[2], bRefreshTable);
+                            $("td.last-updated-cell", oTable).removeClass("last-updated-cell");
+                            $(this).addClass("last-updated-cell");
+                            status = "success";
+                        }
+                        else if (properties.sSuccessResponse == "IGNORE" || 
                             (     properties.aoColumns != null
-                                && properties.aoColumns[aPos[2]] != null 
-                                && properties.aoColumns[aPos[2]].sSuccessResponse == "IGNORE") || 
+                                && properties.aoColumns[origCol] != null 
+                                && properties.aoColumns[origCol].sSuccessResponse == "IGNORE") || 
                             (sNewCellValue == null) || (sNewCellValue == sValue) || 
                             properties.sSuccessResponse == sValue) {
                             if(sNewCellDisplayValue == null)
@@ -312,7 +325,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
                             status = "success";
                         } else {
                             oTable.fnUpdate(sOldValue, aPos[0], aPos[2], bRefreshTable);
-                            properties.fnShowError(sValue, "update");
+                            //properties.fnShowError(sValue, "update");
                             status = "failure";
                         }
                     }
@@ -355,9 +368,11 @@ returns true if plugin should continue with sending AJAX request, false will abo
 
             if (properties.aoColumns != null) {
 
+                // DTEindex counts actual viewable columns, DTindex counts aoColumn index
                 for (var iDTindex = 0, iDTEindex = 0; iDTindex < oSettings.aoColumns.length; iDTindex++) {
                     if (oSettings.aoColumns[iDTindex].bVisible) {//if DataTables column is visible
-                        if (properties.aoColumns[iDTEindex] == null) {
+                        var iReorderIndex = oSettings.aoColumns[iDTindex]._ColReorder_iOrigCol != null ? oSettings.aoColumns[iDTindex]._ColReorder_iOrigCol : iDTindex;
+                        if (properties.aoColumns[iReorderIndex] == null) {
                             //If editor for the column is not defined go to the next column
                             iDTEindex++;
                             continue;
@@ -366,7 +381,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
                         cells = $("td:nth-child(" + (iDTEindex + 1) + ")", aoNodes);
 
                         var oColumnSettings = oDefaultEditableSettings;
-                        oColumnSettings = $.extend({}, oDefaultEditableSettings, properties.oEditableSettings, properties.aoColumns[iDTEindex]);
+                        oColumnSettings = $.extend({}, oDefaultEditableSettings, properties.oEditableSettings, properties.aoColumns[iReorderIndex]);
                         iDTEindex++;
                         var sUpdateURL = properties.sUpdateURL;
                         try {
@@ -724,12 +739,12 @@ returns true if plugin should continue with sending AJAX request, false will abo
             ///</summary>
 
             //To refresh table with preserver pagination on cell edit
-            //if (oSettings.oFeatures.bServerSide === false) {
+            if (oSettings.oFeatures.bServerSide === false) {
                 oSettings._iDisplayStart = iDisplayStart;
                 oSettings.oApi._fnCalculateEnd(oSettings);
                 //draw the 'current' page
                 oSettings.oApi._fnDraw(oSettings);
-            //}
+            }
         }
 
         function _fnOnBeforeAction(sAction) {
@@ -1255,7 +1270,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
             }
 
             //Add handler to the inline delete buttons
-            $(".table-action-deletelink", oTable).live("click", _fnOnRowDeleteInline);
+            $(".table-action-deletelink", oTable).on("click", _fnOnRowDeleteInline);
 
             if (!properties.bUseKeyTable) {
             //Set selected class on row that is clicked
@@ -1298,7 +1313,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
                         var oActionFormLink = $(".table-action-" + sAction);
                         if (oActionFormLink.length != 0) {
 
-                            oActionFormLink.live("click", function () {
+                            oActionFormLink.on("click", function () {
 
 
                                 var sClass = this.className;
@@ -1367,14 +1382,13 @@ returns true if plugin should continue with sending AJAX request, false will abo
 
                     }
 
-
-
-
                 } // end for (var i = 0; i < properties.aoTableActions.length; i++)
+
             } //end if (properties.aoTableActions != null)
 
-
         });
+
     };
+
 })(jQuery);
 
