@@ -1,7 +1,7 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+ <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
-		<title>DataTables (table plug-in for jQuery) Column Filter Add-on</title>
+		<title>DataTables (table plug-in for jQuery) Data Manager Add-on</title>
 		
 		<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/media/images/favicon.ico">
 		<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://www.datatables.net/rss.xml">
@@ -26,8 +26,10 @@
 
 		
 		<script type="text/javascript" src="media/js/complete.js"></script>
-		<script src="media/js/jquery.min.js" type="text/javascript"></script>
-        	<script src="media/js/jquery.dataTables.min.js" type="text/javascript"></script>
+		<script src="media/js/jquery-1.10.2.js" type="text/javascript"></script>
+		<!--<script src="media/js/jquery-migrate-1.2.1.js" type="text/javascript"></script>-->
+        <!--<script src="http://code.jquery.com/jquery-migrate-1.1.0.js"></script>-->
+        	<script src="media/js/jquery.dataTables.1.10.0-dev.js" type="text/javascript"></script>
 		<script type="text/javascript" src="media/js/jquery.dataTables.editable.js"></script>
 		<script src="media/js/jquery.jeditable.js" type="text/javascript"></script>
         	<script src="media/js/jquery-ui.js" type="text/javascript"></script>
@@ -97,19 +99,6 @@ sAddDeleteToolbarSelector: ".dataTables_length"
 			} );
 		</script>
 
-        <script type="text/javascript">
-
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', 'UA-17838786-2']);
-            _gaq.push(['_trackPageview']);
-
-            (function () {
-                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            })();
-
-</script>
 	</head>
 	
 
@@ -121,7 +110,7 @@ sAddDeleteToolbarSelector: ".dataTables_length"
 					
 
 						<img src="media/images/DataTables.jpg" alt="DataTables logo">
-						DataTables Editable (CRUD) Add-on
+						DataTables Data Manager (CRUD) Add-on
 					
 				</h1>
 				<ul>
@@ -141,7 +130,7 @@ sAddDeleteToolbarSelector: ".dataTables_length"
 						
 			<div id="fw_content">
 				<div class="grid_column_1">
-					<p><a  href="http://www.datatables.net/">DataTables</a> is a plug-in for the <a href="http://www.jquery.com/">jQuery</a> Javascript library. It is a highly flexible tool, based upon the foundations of progressive enhancement, which will add advanced interaction controls to any HTML table. DataTables Editable plugin is an add-on for the DataTables where are provided out of box data management (CRUD) functionalities. Key features:</p>
+					<p><a  href="http://www.datatables.net/">DataTables</a> is a plug-in for the <a href="http://www.jquery.com/">jQuery</a> Javascript library. It is a highly flexible tool, based upon the foundations of progressive enhancement, which will add advanced interaction controls to any HTML table. DataTables Data Manager plugin is an add-on for the DataTables where are provided out of box data management (CRUD) functionalities. Key features:</p>
 					<ul class="limit_length">
 						<li>Inline cell editing</li>
 						<li>Select/delete rows in the table</li>
@@ -718,7 +707,7 @@ $(document).ready(function(){
 			
 						<div id="fw_footer">
 				<div class="css_center">
-					DataTables Editable Add-on created by Jovan Popovic &copy; 2010-2011<br>
+					DataTables Data Manager Add-on created by Jovan Popovic &copy; 2010-2011<br>
 					DataTables designed and created by <a href="http://www.sprymedia.co.uk">Allan Jardine</a> &copy; 2007-2011<br>
 
 				</div>
