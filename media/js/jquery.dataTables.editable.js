@@ -509,9 +509,9 @@
                             }
 
                             properties.fnOnEdited(status, sOldValue, sNewCellDisplayValue, aPos[0], aPos[1], aPos[2]);
-                            /*if (settings.fnOnCellUpdated !== null) {
-                                settings.fnOnCellUpdated(status, sValue, aPos[0], aPos[2], settings);
-                            }*/
+                            if (settings.fnOnCellUpdated !== null) {
+                                settings.fnOnCellUpdated(sValue, $(this).parent());
+                            }
 
                             fnSetDisplayStart();
                             if (properties.bUseKeyTable) {
