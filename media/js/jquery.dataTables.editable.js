@@ -509,7 +509,7 @@
                             }
 
                             properties.fnOnEdited(status, sOldValue, sNewCellDisplayValue, aPos[0], aPos[1], aPos[2]);
-                            if (settings.fnOnCellUpdated !== null) {
+                            if (settings.fnOnCellUpdated != undefined && settings.fnOnCellUpdated !== null) {
                                 settings.fnOnCellUpdated(sValue, $(this).parent());
                             }
 
